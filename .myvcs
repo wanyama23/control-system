@@ -42,3 +42,19 @@ def commit(message):
     with open('.myvcs/refs/heads/master', 'w') as f:
         f.write(oid)
     os.remove('.myvcs/index')        
+
+
+
+
+def log():
+    oid = open('.myvcs/refs/heads/master').read().strip()
+    while oid:
+        with open(f'.myvcs/objects/{oid}', 'r') as f:
+            data = f.read().splitlines()
+        print(f'commit {oid}')
+        for line in data:
+            if line.startswith('parent '):
+                oid = line[len('parent '):]
+                break
+        else:
+            oid = None    
