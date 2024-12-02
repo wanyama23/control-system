@@ -1,4 +1,5 @@
 import os
+import hashlib
 
 def init():
     os.makedirs('.myvcs', exist_ok=True)
@@ -8,3 +9,21 @@ def init():
     with open('.myvcs/refs/heads/master', 'w') as f:
         f.write('')
     os.makedirs('.myvcs/objects', exist_ok=True)
+
+
+
+
+
+def hash_object(data):
+    sha1 = hashlib.sha1()
+    sha1.update(data)
+    return sha1.hexdigest()
+
+def add(file_path):
+    with open(file_path, 'rb') as f:
+        data = f.read()
+    oid = hash_object(data)
+    with open(f'.myvcs/objects/{oid}', 'wb') as f:
+        f.write(data)
+    with open('.myvcs/index', 'a') as f:
+        f.write(f'{oid} {file_path}\n')    
