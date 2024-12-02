@@ -1,0 +1,10 @@
+import os
+
+def init():
+    os.makedirs('.myvcs', exist_ok=True)
+    with open('.myvcs/HEAD', 'w') as f:
+        f.write('master')
+    os.makedirs('.myvcs/refs/heads', exist_ok=True)
+    with open('.myvcs/refs/heads/master', 'w') as f:
+        f.write('')
+    os.makedirs('.myvcs/objects', exist_ok=True)
