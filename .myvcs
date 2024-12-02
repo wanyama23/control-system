@@ -46,6 +46,9 @@ def commit(message):
 
 
 
+
+# a function to view commit history
+
 def log():
     oid = open('.myvcs/refs/heads/master').read().strip()
     while oid:
@@ -58,3 +61,25 @@ def log():
                 break
         else:
             oid = None    
+
+
+
+
+
+
+def branch(name):
+    oid = open('.myvcs/refs/heads/master').read().strip()
+    with open(f'.myvcs/refs/heads/{name}', 'w') as f:
+        f.write(oid)
+
+def merge(branch):
+    with open(f'.myvcs/refs/heads/{branch}', 'r') as f:
+        branch_oid = f.read().strip()
+    with open('.myvcs/refs/heads/master', 'r') as f:
+        master_oid = f.read().strip()
+    merge_commit = f'tree (merged data)\nparents {master_oid} {branch_oid}\n'
+    oid = hash_object(merge_commit.encode())
+    with open(f'.myvcs/objects/{oid}', 'wb') as f:
+        f.write(merge_commit.encode())
+    with open('.myvcs/refs/heads/master', 'w') as f:
+        f.write(oid)            
