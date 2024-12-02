@@ -27,3 +27,18 @@ def add(file_path):
         f.write(data)
     with open('.myvcs/index', 'a') as f:
         f.write(f'{oid} {file_path}\n')    
+
+
+
+
+def commit(message):
+    with open('.myvcs/index', 'r') as f:
+        files = f.read()
+    parent = open('.myvcs/refs/heads/master').read().strip()
+    commit_data = f'tree {files}\nparent {parent}\nmessage {message}\n'
+    oid = hash_object(commit_data.encode())
+    with open(f'.myvcs/objects/{oid}', 'wb') as f:
+        f.write(commit_data.encode())
+    with open('.myvcs/refs/heads/master', 'w') as f:
+        f.write(oid)
+    os.remove('.myvcs/index')        
