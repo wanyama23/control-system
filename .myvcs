@@ -83,3 +83,12 @@ def merge(branch):
         f.write(merge_commit.encode())
     with open('.myvcs/refs/heads/master', 'w') as f:
         f.write(oid)            
+
+
+
+
+
+import shutil
+
+def clone(repo_path, clone_path):
+    shutil.copytree(repo_path, clone_path)        
